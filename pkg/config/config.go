@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/json"
 	"fmt"
+	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,25 +20,39 @@ type EnumConfig struct {
 	Enums   []string `json:"values"`
 }
 
-func Parse(cfgPath string) (*Config, error) {
-	extension := filepath.Ext(cfgPath)
+func Parse(path string) (*Config, error) {
+	extension := filepath.Ext(path)
 
 	switch strings.ToLower(extension) {
 	case "json":
-		return parseJson(cfgPath)
+		return parseJson(path)
+	case "yaml", "yml":
+		return parseYaml(path)
 	default:
 		return nil, fmt.Errorf("unsupported file type %q", extension)
 	}
 }
 
 func parseJson(path string) (*Config, error) {
-	// read config file from the json file and return the config
 	file, err := os.ReadFile(path)
 	if err != nil {
 		return &Config{}, err
 	}
 	config := &Config{}
 	err = json.Unmarshal(file, config)
+	if err != nil {
+		return &Config{}, err
+	}
+	return config, nil
+}
+
+func parseYaml(path string) (*Config, error) {
+	file, err := os.ReadFile(path)
+	if err != nil {
+		return &Config{}, err
+	}
+	config := &Config{}
+	err = yaml.Unmarshal(file, config)
 	if err != nil {
 		return &Config{}, err
 	}
