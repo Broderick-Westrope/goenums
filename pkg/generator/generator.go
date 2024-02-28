@@ -15,7 +15,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-//go:embed template/enum.tmpl
+//go:embed template/enum.gotmpl
 var fs embed.FS
 
 type EnumTemplateData struct {
