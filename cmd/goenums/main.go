@@ -2,13 +2,20 @@ package main
 
 import (
 	"fmt"
+	"github.com/broderick-westrope/goenums/pkg/generator"
+	"github.com/spf13/pflag"
 	"os"
 
 	"github.com/broderick-westrope/goenums/pkg/config"
-	"github.com/broderick-westrope/goenums/pkg/generator"
 )
 
 func main() {
+	pflag.Usage = func() {
+		fmt.Println("Usage: goenums <config file path> <output path>")
+		pflag.PrintDefaults()
+	}
+	pflag.Parse()
+
 	config, err := ParseInput()
 	if err != nil {
 		return
@@ -22,10 +29,6 @@ func main() {
 }
 
 func ParseInput() (config.Config, error) {
-	err := validateInput()
-	if err != nil {
-		return config.Config{}, err
-	}
 	cfgPath := os.Args[1]
 	cfg, err := config.ReadConfig(cfgPath)
 	if err != nil {
@@ -33,21 +36,4 @@ func ParseInput() (config.Config, error) {
 	}
 	cfg.OutputPath = os.Args[2]
 	return cfg, err
-}
-
-func validateInput() error {
-	if len(os.Args) < 3 {
-		printHelp()
-		return fmt.Errorf("not enough arguments")
-	}
-	arg1 := os.Args[1]
-	if arg1 == "-h" || arg1 == "--h" || arg1 == "-help" || arg1 == "--help" {
-		printHelp()
-		return fmt.Errorf("help")
-	}
-	return nil
-}
-
-func printHelp() {
-	fmt.Println("Usage: goenums <config file path> <output path>")
 }
