@@ -10,7 +10,7 @@ import (
 )
 
 type Config struct {
-	OutputPath string        `json:"outputPath" yaml:"outputPath"`
+	OutputPath string        `json:"output_path" yaml:"output_path"`
 	Configs    []*EnumConfig `json:"enums" yaml:"enums"`
 }
 

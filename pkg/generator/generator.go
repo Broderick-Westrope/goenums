@@ -24,6 +24,7 @@ type EnumTemplateData struct {
 	TypeNameLower  string
 	TypeNameTitle  string
 	TypeNamePlural string
+	MethodReceiver string
 	Enums          []Enum
 }
 
@@ -58,20 +59,24 @@ func (g *Generator) Generate() error {
 }
 
 func generateEnum(etd EnumTemplateData, outPath string) error {
-	f, fp, err := mkDirAndGoFiles(outPath, etd.Package, etd.TypeName)
+	f, fp, err := setupFiles(outPath, etd.Package, etd.TypeName)
 	if err != nil {
 		return err
 	}
 	defer func() {
 		if err := f.Close(); err != nil {
-			fmt.Println("Error closing file", err)
+			fmt.Println("Error closing file: ", err)
 		}
 	}()
-	t := template.Must(template.ParseFS(fs, "template/enum.tmpl"))
+	t := template.Must(template.ParseFS(fs, "template/enum.gotmpl"))
+	if err != nil {
+		return err
+	}
 	err = t.Execute(f, etd)
 	if err != nil {
 		return err
 	}
+	// TODO: optionally skip formatting
 	cmd := exec.Command("gofmt", "-w", fp)
 	err = cmd.Run()
 	if err != nil {
@@ -90,12 +95,14 @@ func parseConfig(cfg *config.Config) []EnumTemplateData {
 		if typeNameTitle[len(typeNameTitle)-1] == 's' {
 			typeNamePlural = typeNameTitle + "es"
 		}
+		typeNameLower := strings.ToLower(typeName)
 		etd := EnumTemplateData{
 			Package:        packageName,
 			TypeName:       typeNameTitle,
-			TypeNameLower:  strings.ToLower(typeName),
+			TypeNameLower:  typeNameLower,
 			TypeNameTitle:  typeNameTitle,
 			TypeNamePlural: typeNamePlural,
+			MethodReceiver: string(typeNameLower[0]),
 			Enums:          enums,
 		}
 		data[i] = etd
@@ -103,11 +110,11 @@ func parseConfig(cfg *config.Config) []EnumTemplateData {
 	return data
 }
 
-func configToVars(cfg *config.EnumConfig) (string, string, []Enum) {
-	typ := cfg.Type
-	pkg := cfg.Package
+func configToVars(cfg *config.EnumConfig) (typ, pkg string, enums []Enum) {
+	typ = cfg.Type
+	pkg = cfg.Package
 	enumStrs := cfg.Enums
-	enums := make([]Enum, len(enumStrs))
+	enums = make([]Enum, len(enumStrs))
 	c := cases.Title(language.English)
 	typeTitle := c.String(typ)
 	for i, enumStr := range enumStrs {
@@ -124,26 +131,35 @@ func configToVars(cfg *config.EnumConfig) (string, string, []Enum) {
 	return typ, pkg, enums
 }
 
-func mkDirAndGoFiles(outpath, pkg, typ string) (*os.File, string, error) {
-	if _, err := os.Stat(outpath); os.IsNotExist(err) {
-		err = os.Mkdir(outpath, os.ModePerm)
-		if err != nil {
-			return nil, "", err
-		}
+func setupFiles(outpath, pkg, typ string) (*os.File, string, error) {
+	if err := makeDirIfNotExist(outpath); err != nil {
+		return nil, "", err
 	}
+
 	dir := path.Join(outpath, pkg)
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		err = os.Mkdir(dir, os.ModePerm)
-		if err != nil {
-			return nil, "", err
-		}
+	if err := makeDirIfNotExist(dir); err != nil {
+		return nil, "", err
 	}
+
 	fName := fmt.Sprintf("%s.go", strings.ToLower(typ))
 	fPath := path.Join(dir, fName)
-	f, err := os.OpenFile(fPath, os.O_CREATE|os.O_RDWR, 0666)
+	f, err := os.Create(fPath)
 	if err != nil {
 		return nil, "", err
 	}
-	fullPath := path.Join(outpath, pkg, fName)
-	return f, fullPath, nil
+	return f, fPath, nil
+}
+
+func makeDirIfNotExist(path string) error {
+	if _, err := os.Stat(path); err != nil {
+		if os.IsNotExist(err) {
+			err = os.MkdirAll(path, os.ModePerm)
+			if err != nil {
+				return err
+			}
+		} else {
+			return err
+		}
+	}
+	return nil
 }

@@ -55,6 +55,6 @@ func main() {
 	err = g.Generate()
 	if err != nil {
 		fmt.Println("Error generating code:", err)
-		return
+		os.Exit(1)
 	}
 }

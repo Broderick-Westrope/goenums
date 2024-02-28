@@ -1,155 +1,109 @@
 # goenums
 
-goenums is a tool to help you generate go type safe enums that are much more tightly typed than just `iota` defined enums.
+goenums is a powerful command-line tool designed to generate type-safe Go enums with rich features such as string representations and JSON (de)serialization. Unlike traditional iota-based enums, goenums provides a more robust and flexible approach to using enums in Go, enhancing code safety and developer convenience.
 
-# Usage
-`goenums -h`
-`Usage: goenums <config file path> <output path>`
-### Example
-Defining the list of enums their type and package in a JSON list is the configuration format.  This allows generating many enums in one shot.
-input.json:
+This repository was forked from [zarldev/goenums](https://github.com/zarldev/goenums).
+
+## Features
+
+- Type Safety: Generates enums as concrete types, preventing misuse and enhancing code safety.
+- String Representation: Automatically generates string methods for enums, facilitating debugging and logging.
+- JSON Support: Includes methods for JSON marshaling and unmarshaling, ideal for RESTful APIs.
+- Configuration Flexibility: Supports both JSON and YAML configurations, automatically detected based on file extension or manually specified with the --format flag.
+- Extendability: Allows for easy extension of enum functionality without modifying generated code, supporting a clean separation of generated and custom logic.
+
+## Installation
+
+To install goenums, you can use `go install`:
+
+```sh
+go install github.com/yourusername/goenums
+```
+
+### Stringer
+
+This tool provides an option to leverage the official [`stringer`](https://pkg.go.dev/golang.org/x/tools/cmd/stringer) tool to automatically generate `String()` methods. This behaviour is enabled by default, however, if you want to use `goenums` without `stringer` you can do so with the `--no-stringer` flag.
+
+If you want to use `stringer` (I recommend you do), then please make sure you have it installed: 
+
+```sh
+go install golang.org/x/tools/cmd/stringer
+```
+
+## Usage
+
+```sh
+goenums [flags] config output
+```
+
+- `config`: the path for the configuration file.
+  - When the `--format` flag is omitted, the format of the file contents are assumed to match the file extension (eg. `input.json` is assumed to be a JSON file).
+- `output`: the path to place the generated files (hence, it should end in a directory).
+  - When the output path is specified in the configuration file, this argument may be omitted.
+  - When provided, this argument will always be used, even when the configuration file specifies an output path. 
+
+### Flags
+
+- `-h`, `--help`: Show help/usage information.
+- `-f`, `--format`: Manually specify the configuration format (json or yaml). When this flag is omitted, the configuration format is derived from the file extension (eg. a `input.json` config file is assumed to be of the JSON format).
+
+### Configuration
+
+Define your enums in a JSON or YAML file. `goenums` will automatically detect the format based on the file extension or use the format specified with the `--format` flag.
+
+JSON Example
 ```json
 {
+  "output_path": "./some_output_dir",
   "enums": [
     {
       "package": "validation",
-      "type": "status",
-      "values": [
-        "Failed",
-        "Passed",
-        "Skipped",
-        "Scheduled",
-        "Running"
-      ]
+      "type": "Status",
+      "values": ["Failed", "Passed", "Skipped", "Scheduled", "Running"]
     }
   ]
 }
 ```
-Running the following command `goenums ./input.json ./output` will generate `output/validation/status.go` which looks like:
 
-```golang
-package validation
-
-import "fmt"
-
-type Status struct {
-	status
-}
-
-type status int
-
-const (
-	unknown status = iota
-	failed
-	passed
-	skipped
-	scheduled
-	running
-)
-
-var (
-    strStatusArray = [...]string{
-		failed:    "FAILED",
-		passed:    "PASSED",
-		skipped:   "SKIPPED",
-		scheduled: "SCHEDULED",
-		running:   "RUNNING",
-	}
-
-	typeStatusMap = map[string]status{
-		"FAILED":    failed,
-		"PASSED":    passed,
-		"SKIPPED":   skipped,
-		"SCHEDULED": scheduled,
-		"RUNNING":   running,
-	}
-)
-
-func (t status) String() string {
-	return strStatusMap[t]
-}
-
-func Parse(a any) Status {
-	switch v := a.(type) {
-	case Status:
-		return v
-	case string:
-		return Status{stringToStatus(v)}
-	case fmt.Stringer:
-		return Status{stringToStatus(v.String())}
-	case int:
-		return Status{status(v)}
-	case int64:
-		return Status{status(int(v))}
-	case int32:
-		return Status{status(int(v))}
-	}
-	return Status{unknown}
-}
-
-func stringToStatus(s string) status {
-	if v, ok := typeStatusMap[s]; ok {
-		return v
-	}
-	return unknown
-}
-
-func (t status) IsValid() bool {
-	return t >= status(1) && t <= status(len(strStatusArray))
-}
-
-type statussContainer struct {
-	UNKNOWN   Status
-	FAILED    Status
-	PASSED    Status
-	SKIPPED   Status
-	SCHEDULED Status
-	RUNNING   Status
-}
-
-var Statuses = statussContainer{
-	UNKNOWN:   Status{unknown},
-	FAILED:    Status{failed},
-	PASSED:    Status{passed},
-	SKIPPED:   Status{skipped},
-	SCHEDULED: Status{scheduled},
-	RUNNING:   Status{running},
-}
-
-func (c statussContainer) All() []Status {
-	return []Status{
-		c.FAILED,
-		c.PASSED,
-		c.SKIPPED,
-		c.SCHEDULED,
-		c.RUNNING,
-	}
-}
-
-func (t Status) MarshalJSON() ([]byte, error) {
-	return []byte(`"` + t.String() + `"`), nil
-}
-
-func (t *Status) UnmarshalJSON(b []byte) error {
-	*t = Parse(string(b))
-	return nil
-}
+YAML Example
+```yaml
+output_path: some_output_dir
+enums:
+- package: validation
+  type: Status
+  values:
+    - Failed
+    - Passed
+    - Skipped
+    - Scheduled
+    - Running
 ```
-## Features
 
-#### String representation
-All enums are generated with a String representation for each enum and JSON Marshaling and UnMarshaling for use in HTTP Request structs.  
+### Generating Enums
 
-#### Extendable
-The enums can have additional functionality added by just adding another file in the same package with the extra functionality defined there.  Having the extra functionality in another file will allow the generation and regeneration of the enums to not affect this extra functionality. 
+Run goenums with the path to your configuration file and the desired output directory:
 
-#### Safety
-Also the fact that the enums are concrete types with no way to instantiate the nested struct means that you can't just pass the `int` representation of the enum into the `Status` struct.
+```sh
+goenums ./config.json ./output
+```
 
-The above `Validation Status` can be found in the examples directory along with another file extending the behaviour of the `Status` enum and the `config.json` that was used to generate.
+Omit the output argument if you want to use the output path defined in the configuration file:
 
-## TODO
-* Move to the use of the //go:generate format
-* Make use of stringer cmd tool for string representation
-* Remove need for JSON configuration
-  
+```sh
+goenums ./config.json
+```
+
+Use the `--format` flag if your configuration file does not have an appropriate extension (eg. a JSON file not ending in `.json`):
+
+```sh
+goenums --format=json ./config.other ./output
+```
+
+### Examples
+
+Find more example configurations and generated code in the [examples directory](./examples) of the project repository.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit pull requests, report bugs, and suggest features.
+

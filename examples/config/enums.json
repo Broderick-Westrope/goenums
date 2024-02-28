@@ -1,0 +1,14 @@
+{
+  "enums": [
+    {
+      "package": "auth",
+      "type": "Role",
+      "values": ["Admin", "User", "Guest"]
+    },
+    {
+      "package": "auth",
+      "type": "Status",
+      "values": ["Active", "Inactive", "Suspended"]
+    }
+  ]
+}
