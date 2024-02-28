@@ -18,7 +18,7 @@ const (
 )
 
 var (
-	strStatusMap = map[status]string{
+	strStatusArray = [...]string{
 		failed:    "FAILED",
 		passed:    "PASSED",
 		skipped:   "SKIPPED",
@@ -36,7 +36,7 @@ var (
 )
 
 func (t status) String() string {
-	return strStatusMap[t]
+	return strStatusArray[t]
 }
 
 func Parse(a any) Status {
@@ -65,7 +65,7 @@ func stringToStatus(s string) status {
 }
 
 func (t status) IsValid() bool {
-	return t != unknown
+	return t >= status(1) && t <= status(len(strStatusArray))
 }
 
 type statussContainer struct {

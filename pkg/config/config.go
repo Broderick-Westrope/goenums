@@ -10,49 +10,60 @@ import (
 )
 
 type Config struct {
-	OutputPath string        `json:"outputPath"`
-	Configs    []*EnumConfig `json:"enums"`
+	OutputPath string        `json:"outputPath" yaml:"outputPath"`
+	Configs    []*EnumConfig `json:"enums" yaml:"enums"`
 }
 
 type EnumConfig struct {
-	Package string   `json:"package"`
-	Type    string   `json:"type"`
-	Enums   []string `json:"values"`
+	Package string   `json:"package" yaml:"package"`
+	Type    string   `json:"type" yaml:"type"`
+	Enums   []string `json:"values" yaml:"values"`
 }
 
-func Parse(path string) (*Config, error) {
-	extension := filepath.Ext(path)
-
-	switch strings.ToLower(extension) {
-	case "json":
-		return parseJson(path)
-	case "yaml", "yml":
-		return parseYaml(path)
-	default:
-		return nil, fmt.Errorf("unsupported file type %q", extension)
-	}
-}
-
-func parseJson(path string) (*Config, error) {
+func Parse(path, format string) (*Config, error) {
 	file, err := os.ReadFile(path)
 	if err != nil {
 		return &Config{}, err
 	}
+
+	var extension string
+	if format == "" {
+		extension = filepath.Ext(path)
+	} else {
+		extension = format
+	}
+	extension = strings.TrimPrefix(extension, ".")
+
+	var cfg *Config
+	switch strings.ToLower(extension) {
+	case "json":
+		cfg, err = parseJson(file)
+	case "yaml", "yml":
+		cfg, err = parseYaml(file)
+	default:
+		return nil, fmt.Errorf("unsupported file format %q", extension)
+	}
+	if err != nil {
+		if format == "" {
+			return nil, fmt.Errorf("failed to automatically parse file %q. Try specifying a format with the -format flag: %w", path, err)
+		}
+		return nil, fmt.Errorf("failed to parse file %q: %w", path, err)
+	}
+	return cfg, nil
+}
+
+func parseJson(data []byte) (*Config, error) {
 	config := &Config{}
-	err = json.Unmarshal(file, config)
+	err := json.Unmarshal(data, config)
 	if err != nil {
 		return &Config{}, err
 	}
 	return config, nil
 }
 
-func parseYaml(path string) (*Config, error) {
-	file, err := os.ReadFile(path)
-	if err != nil {
-		return &Config{}, err
-	}
+func parseYaml(data []byte) (*Config, error) {
 	config := &Config{}
-	err = yaml.Unmarshal(file, config)
+	err := yaml.Unmarshal(data, config)
 	if err != nil {
 		return &Config{}, err
 	}

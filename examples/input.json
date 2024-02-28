@@ -1,6 +1,6 @@
 {
   "enums": [
-     {
+    {
       "package": "validation",
       "type": "status",
       "values": [

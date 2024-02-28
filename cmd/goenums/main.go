@@ -12,7 +12,12 @@ func main() {
 	pflag.Usage = func() {
 		fmt.Println("Usage: goenums <config path> <output path>")
 		pflag.PrintDefaults()
+		os.Exit(0)
 	}
+
+	var format string
+	pflag.StringVarP(&format, "format", "f", "", "The format of the config file (json, yaml, yml)")
+
 	pflag.Parse()
 
 	// Check for the config file
@@ -23,9 +28,14 @@ func main() {
 	cfgPath := os.Args[1]
 
 	// Parse the config file
-	cfg, err := config.Parse(cfgPath)
+	cfg, err := config.Parse(cfgPath, format)
 	if err != nil {
 		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+
+	if len(cfg.Configs) == 0 {
+		fmt.Printf("Error: No enum configurations found in the config file %q.\n", cfgPath)
 		os.Exit(1)
 	}
 

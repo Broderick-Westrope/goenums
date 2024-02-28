@@ -1,0 +1,9 @@
+enums:
+  - package: validation
+    type: status
+    values:
+      - Failed
+      - Passed
+      - Skipped
+      - Scheduled
+      - Running
