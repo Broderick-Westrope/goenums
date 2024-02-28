@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/zarldev/goenums/pkg/config"
-	"github.com/zarldev/goenums/pkg/generator"
+	"github.com/broderick-westrope/goenums/pkg/config"
+	"github.com/broderick-westrope/goenums/pkg/generator"
 )
 
 func main() {
