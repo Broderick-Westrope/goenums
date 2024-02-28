@@ -1,4 +1,4 @@
-module github.com/zarldev/goenums
+module github.com/broderick-westrope/goenums
 
 go 1.22.0
 
