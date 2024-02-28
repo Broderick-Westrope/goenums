@@ -40,7 +40,7 @@ type Generator struct {
 	data       []EnumTemplateData
 }
 
-func New(cfg config.Config) *Generator {
+func New(cfg *config.Config) *Generator {
 	return &Generator{
 		data:       parseConfig(cfg),
 		outputPath: cfg.OutputPath,
@@ -80,7 +80,7 @@ func generateEnum(etd EnumTemplateData, outPath string) error {
 	return nil
 }
 
-func parseConfig(cfg config.Config) []EnumTemplateData {
+func parseConfig(cfg *config.Config) []EnumTemplateData {
 	data := make([]EnumTemplateData, len(cfg.Configs))
 	for i, c := range cfg.Configs {
 		typeName, packageName, enums := configToVars(c)
@@ -103,7 +103,7 @@ func parseConfig(cfg config.Config) []EnumTemplateData {
 	return data
 }
 
-func configToVars(cfg config.EnumConfig) (string, string, []Enum) {
+func configToVars(cfg *config.EnumConfig) (string, string, []Enum) {
 	typ := cfg.Type
 	pkg := cfg.Package
 	enumStrs := cfg.Enums
