@@ -14,10 +14,10 @@ type {{.LowerCamelType}} int
 const (
 {{- range $index, $enum := .Enums}}
     {{- if eq $index 0}}
-    unknown{{.CamelType}} {{.LowerCamelType}} = iota
-    {{$enum.LowerCamelValue}}{{.CamelType}}
+    unknown{{$.CamelType}} {{$.LowerCamelType}} = iota
+    {{$enum.LowerCamelValue}}{{$.CamelType}}
     {{- else}}
-    {{$enum.LowerCamelValue}}{{.CamelType}}
+    {{$enum.LowerCamelValue}}{{$.CamelType}}
     {{- end}}
 {{- end}}
 )
@@ -25,13 +25,13 @@ const (
 var (
     str{{.CamelType}}Array = [...]string{
 {{- range $index, $enum := .Enums}}
-         {{$enum.LowerCamelValue}}{{.CamelType}}: "{{$enum.ScreamingSnakeValue}}",
+         {{$enum.LowerCamelValue}}{{$.CamelType}}: "{{$enum.ScreamingSnakeValue}}",
 {{- end}}
     }
 
     type{{.CamelType}}Map = map[string]{{.LowerCamelType}}{
 {{- range $index, $enum := .Enums}}
-         "{{$enum.ScreamingSnakeValue}}": {{$enum.LowerCamelValue}}{{.CamelType}},
+         "{{$enum.ScreamingSnakeValue}}": {{$enum.LowerCamelValue}}{{$.CamelType}},
 {{- end}}
     }
 )
@@ -72,14 +72,14 @@ func ({{.MethodReceiver}} {{.LowerCamelType}}) IsValid() bool {
 type {{.CamelType}}Container struct {
     UNKNOWN {{.CamelType}}
    {{- range $index, $enum := .Enums}}
-    {{$enum.ScreamingSnakeValue}} {{.CamelType}}
+    {{$enum.ScreamingSnakeValue}} {{$.CamelType}}
 {{- end}}
 }
 
 var {{.CamelTypePlural}} = {{.CamelType}}Container{
     UNKNOWN:{{.CamelType}} { unknown{{.CamelType}} },
 {{- range $index, $enum := .Enums}}
-    {{$enum.ScreamingSnakeValue}}:  {{.CamelType}} { {{$enum.LowerCamelValue}}{{.CamelType}} },
+    {{$enum.ScreamingSnakeValue}}:  {{$.CamelType}} { {{$enum.LowerCamelValue}}{{$.CamelType}} },
 {{- end}}
 }
 

@@ -28,7 +28,7 @@ func TestExtractVariables(t *testing.T) {
 				config: &config.EnumConfig{
 					Package: "Test Pkg",
 					Type:    "test Type",
-					Enums:   []string{"One", "Value two", "Three"},
+					Enums:   []string{"One value", "Value two", "and.a_Third"},
 				},
 			},
 			expected: output{
@@ -36,9 +36,9 @@ func TestExtractVariables(t *testing.T) {
 				pkg: "test_pkg",
 				enums: []Enum{
 					{
-						CamelValue:          "One",
-						LowerCamelValue:     "one",
-						ScreamingSnakeValue: "ONE",
+						CamelValue:          "OneValue",
+						LowerCamelValue:     "oneValue",
+						ScreamingSnakeValue: "ONE_VALUE",
 						CamelType:           "TestType",
 						LowerCamelType:      "testType",
 					},
@@ -50,9 +50,9 @@ func TestExtractVariables(t *testing.T) {
 						LowerCamelType:      "testType",
 					},
 					{
-						CamelValue:          "Three",
-						LowerCamelValue:     "three",
-						ScreamingSnakeValue: "THREE",
+						CamelValue:          "AndAThird",
+						LowerCamelValue:     "andAThird",
+						ScreamingSnakeValue: "AND_A_THIRD",
 						CamelType:           "TestType",
 						LowerCamelType:      "testType",
 					},
@@ -94,6 +94,39 @@ func TestExtractVariables(t *testing.T) {
 					t.Errorf("enum.LowerCamelType: want %q, got %q", tc.expected.enums[i].LowerCamelType, e.LowerCamelType)
 				}
 			}
+		})
+	}
+}
+
+func TestParseConfig(t *testing.T) {
+	type input struct {
+		config *config.Config
+	}
+
+	type output struct {
+		etd []EnumTemplateData
+	}
+
+	tt := []struct {
+		name     string
+		input    input
+		expected output
+	}{
+		{
+			name: "basic",
+			input: input{
+				config: &config.Config{
+					OutputPath: "./output/path/",
+					//EnumConfigs: ,
+				},
+			},
+			expected: output{},
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+
 		})
 	}
 }

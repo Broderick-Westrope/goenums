@@ -19,8 +19,6 @@ type Enum struct {
 	CamelValue          string // e.g. SomeEnumValue
 	ScreamingSnakeValue string // e.g. SOME_ENUM_VALUE
 	LowerCamelValue     string // e.g. someEnumValue
-	CamelType           string // e.g. SomeEnumType
-	LowerCamelType      string // e.g. someEnumType
 }
 
 func ParseConfig(cfg *config.Config) []EnumTemplateData {
@@ -61,8 +59,6 @@ func extractVariables(cfg *config.EnumConfig) (typ, pkg string, enums []Enum) {
 			CamelValue:          strcase.ToCamel(n),
 			LowerCamelValue:     strcase.ToLowerCamel(n),
 			ScreamingSnakeValue: strcase.ToScreamingSnake(n),
-			CamelType:           strcase.ToCamel(typ),
-			LowerCamelType:      strcase.ToLowerCamel(typ),
 		}
 	}
 	return typ, pkg, enums
