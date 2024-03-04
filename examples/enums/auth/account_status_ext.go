@@ -1,16 +1,16 @@
 package auth
 
 // IsActive checks if the status is active.
-func (s Status) IsActive() bool {
-	return s == Status{activeStatus}
+func (a *AccountStatus) IsActive() bool {
+	return (*a).accountStatus == activeAccountStatus
 }
 
 // CanLogin determines if the status allows for user login.
-func (s Status) CanLogin() bool {
-	switch s.status {
-	case activeStatus:
+func (a *AccountStatus) CanLogin() bool {
+	switch a.accountStatus {
+	case activeAccountStatus:
 		return true
-	case inactiveStatus, suspendedStatus:
+	case inactiveAccountStatus, suspendedAccountStatus:
 		return false
 	default:
 		return false
@@ -18,13 +18,13 @@ func (s Status) CanLogin() bool {
 }
 
 // StatusMessage provides a user-friendly message describing the status.
-func (s Status) StatusMessage() string {
-	switch s.status {
-	case activeStatus:
+func (a *AccountStatus) StatusMessage() string {
+	switch a.accountStatus {
+	case activeAccountStatus:
 		return "Your account is active."
-	case inactiveStatus:
+	case inactiveAccountStatus:
 		return "Your account is inactive. Please contact support."
-	case suspendedStatus:
+	case suspendedAccountStatus:
 		return "Your account has been suspended. Please contact support for more information."
 	default:
 		return "Unknown account status."

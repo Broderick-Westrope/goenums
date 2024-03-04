@@ -1,7 +1,5 @@
 # Examples
 
-## multiple-enums
-
 This directory contains an example project which has multiple enums defined in the same configuration file. For verbosity, the configuration file is written in both JSON and YAML formats:
 
 - [enum_config.json](./enum_config.json)

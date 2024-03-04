@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/broderick-westrope/goenums/examples/enums/auth"
 )
 
@@ -14,7 +15,7 @@ func main() {
 	fmt.Printf("Role: %d, String: %s\n", role, role.String())
 	// Role: 0, String: Admin
 
-	status := auth.Statuses.ACTIVE
+	status := auth.AccountStatusContainer{}.ACTIVE
 	fmt.Printf("Status: %d, String: %s\n", status, status.String())
 	// Status: 0, String: Active
 
