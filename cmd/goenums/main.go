@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/broderick-westrope/goenums/pkg/config"
 	"github.com/broderick-westrope/goenums/pkg/generator"
 	"github.com/spf13/pflag"
-	"os"
 )
 
 func main() {
@@ -34,7 +35,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if len(cfg.Configs) == 0 {
+	if len(cfg.EnumConfigs) == 0 {
 		fmt.Printf("Error: No enum configurations found in the config file %q.\n", cfgPath)
 		os.Exit(1)
 	}

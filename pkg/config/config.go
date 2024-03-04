@@ -3,15 +3,16 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	OutputPath string        `json:"output_path" yaml:"output_path"`
-	Configs    []*EnumConfig `json:"enums" yaml:"enums"`
+	OutputPath  string        `json:"output_path" yaml:"output_path"`
+	EnumConfigs []*EnumConfig `json:"enums" yaml:"enums"`
 }
 
 type EnumConfig struct {

@@ -7,7 +7,7 @@
     },
     {
       "package": "auth",
-      "type": "Status",
+      "type": "Account Status",
       "values": ["Active", "Inactive", "Suspended"]
     }
   ]

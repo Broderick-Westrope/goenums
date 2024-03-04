@@ -27,7 +27,7 @@ func TestParseJson(t *testing.T) {
 			expected: expected{
 				cfg: &Config{
 					OutputPath: "",
-					Configs: []*EnumConfig{
+					EnumConfigs: []*EnumConfig{
 						{
 							Package: "validation",
 							Type:    "status",
@@ -58,8 +58,8 @@ func TestParseJson(t *testing.T) {
 			if cfg.OutputPath != tc.expected.cfg.OutputPath {
 				t.Errorf("Output Path: expected %v, got %v", tc.expected.cfg.OutputPath, cfg.OutputPath)
 			}
-			if !reflect.DeepEqual(cfg.Configs, tc.expected.cfg.Configs) {
-				t.Errorf("Enum Configs: expected %v, got %v", tc.expected.cfg.Configs, cfg.Configs)
+			if !reflect.DeepEqual(cfg.EnumConfigs, tc.expected.cfg.EnumConfigs) {
+				t.Errorf("Enum EnumConfigs: expected %v, got %v", tc.expected.cfg.EnumConfigs, cfg.EnumConfigs)
 			}
 		})
 	}
@@ -87,7 +87,7 @@ func TestParseYaml(t *testing.T) {
 			expected: expected{
 				cfg: &Config{
 					OutputPath: "",
-					Configs: []*EnumConfig{
+					EnumConfigs: []*EnumConfig{
 						{
 							Package: "validation",
 							Type:    "status",
@@ -118,8 +118,8 @@ func TestParseYaml(t *testing.T) {
 			if cfg.OutputPath != tc.expected.cfg.OutputPath {
 				t.Errorf("Output Path: expected %v, got %v", tc.expected.cfg.OutputPath, cfg.OutputPath)
 			}
-			if !reflect.DeepEqual(cfg.Configs, tc.expected.cfg.Configs) {
-				t.Errorf("Enum Configs: expected %v, got %v", tc.expected.cfg.Configs, cfg.Configs)
+			if !reflect.DeepEqual(cfg.EnumConfigs, tc.expected.cfg.EnumConfigs) {
+				t.Errorf("Enum EnumConfigs: expected %v, got %v", tc.expected.cfg.EnumConfigs, cfg.EnumConfigs)
 			}
 		})
 	}

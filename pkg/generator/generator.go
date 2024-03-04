@@ -39,8 +39,8 @@ func (g *Generator) Generate() error {
 	return nil
 }
 
-func generateEnum(etd parser.EnumTemplateData, outPath string) error {
-	f, fp, err := setupFiles(outPath, etd.Package, etd.TypeName)
+func generateEnum(templateData parser.EnumTemplateData, outPath string) error {
+	f, fp, err := setupFiles(outPath, templateData.SnakePackage, templateData.CamelType)
 	if err != nil {
 		return err
 	}
@@ -50,7 +50,7 @@ func generateEnum(etd parser.EnumTemplateData, outPath string) error {
 		}
 	}()
 	t := template.Must(template.ParseFS(fs, "template/enum.gotmpl"))
-	err = t.Execute(f, etd)
+	err = t.Execute(f, templateData)
 	if err != nil {
 		return err
 	}
