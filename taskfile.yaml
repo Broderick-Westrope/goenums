@@ -9,7 +9,7 @@ tasks:
   test:
     desc: "Run tests"
     cmds:
-      - go test -v ./...
+      - go test ./...
 
   build:
     desc: "Build program"
