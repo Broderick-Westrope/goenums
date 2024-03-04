@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/broderick-westrope/goenums/pkg/config"
-	"github.com/broderick-westrope/goenums/pkg/config/parser"
+	"github.com/broderick-westrope/goenums/internal/config"
+	"github.com/broderick-westrope/goenums/internal/config/parser"
 )
 
 //go:embed template/enum.gotmpl

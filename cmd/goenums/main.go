@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/broderick-westrope/goenums/pkg/config"
-	"github.com/broderick-westrope/goenums/pkg/generator"
+	"github.com/broderick-westrope/goenums/internal/config"
+	"github.com/broderick-westrope/goenums/internal/generator"
 	"github.com/spf13/pflag"
 )
 

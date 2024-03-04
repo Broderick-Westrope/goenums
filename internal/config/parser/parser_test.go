@@ -3,7 +3,7 @@ package parser
 import (
 	"testing"
 
-	"github.com/broderick-westrope/goenums/pkg/config"
+	"github.com/broderick-westrope/goenums/internal/config"
 )
 
 func TestExtractVariables(t *testing.T) {
@@ -70,7 +70,7 @@ func TestExtractVariables(t *testing.T) {
 			}
 
 			if pkg != tc.expected.pkg {
-				t.Errorf("pkg: want %q, got %q", tc.expected.pkg, pkg)
+				t.Errorf("internal: want %q, got %q", tc.expected.pkg, pkg)
 			}
 
 			if len(enums) != len(tc.expected.enums) {

@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/broderick-westrope/goenums/pkg/config"
+	"github.com/broderick-westrope/goenums/internal/config"
 	"github.com/iancoleman/strcase"
 )
 
