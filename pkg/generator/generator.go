@@ -6,8 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"path"
-	"strings"
+	"path/filepath"
 	"text/template"
 
 	"github.com/broderick-westrope/goenums/pkg/config"
@@ -40,7 +39,8 @@ func (g *Generator) Generate() error {
 }
 
 func generateEnum(templateData parser.EnumTemplateData, outPath string) error {
-	f, fp, err := setupFiles(outPath, templateData.SnakePackage, templateData.CamelType)
+	path := filepath.Join(outPath, templateData.SnakePackage)
+	f, fp, err := setupFiles(path, templateData.SnakeFileName)
 	if err != nil {
 		return err
 	}
@@ -63,19 +63,14 @@ func generateEnum(templateData parser.EnumTemplateData, outPath string) error {
 	return nil
 }
 
-func setupFiles(outpath, pkg, typ string) (*os.File, string, error) {
-	if err := makeDirIfNotExist(outpath); err != nil {
+// setupFiles creates the file and the path if it doesn't exist
+// filename should not include the path or extension
+func setupFiles(path, filename string) (*os.File, string, error) {
+	if err := makeDirIfNotExist(path); err != nil {
 		return nil, "", err
 	}
 
-	dir := path.Join(outpath, pkg)
-	if err := makeDirIfNotExist(dir); err != nil {
-		return nil, "", err
-	}
-
-	typ = strings.ReplaceAll(typ, " ", "_")
-	fName := fmt.Sprintf("%s.go", strings.ToLower(typ))
-	fPath := path.Join(dir, fName)
+	fPath := filepath.Join(path, filename+".go")
 	f, err := os.Create(fPath)
 	if err != nil {
 		return nil, "", err
