@@ -79,6 +79,10 @@ enums:
     - Running
 ```
 
+#### Naming
+
+All configuration items (excluding the `output_path`) are parsed through the [iancoleman/strcase](https://github.com/iancoleman/strcase) Go package. This means that, at the time of writing this, you can indicate new words using capitalisation (eg. camelCase), or by separating words with underscores (_), hyphens (-), dots (.) or spaces. The package will automatically convert these to the appropriate Go naming convention. Please check the package documentation for the most up-to-date information.
+
 ### Generating Enums
 
 Run goenums with the path to your configuration file and the desired output directory:

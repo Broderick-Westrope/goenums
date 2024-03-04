@@ -12,10 +12,10 @@ These files demonstrate how to perform the same configuration in both JSON and Y
 The [enums directory](./enums) contains:
 - `role.go` - The generated code for the `Role` enum
 - `role_ext.go` - Some manually written code to extend the `Role` enum with domain specific methods
-- `status.go` - The generated code for the `Status` enum
-- `status_ext.go` - Some manually written code to extend the `Status` enum with domain specific methods
+- `account_status.go` - The generated code for the `AccountStatus` enum
+- `account_status_ext.go` - Some manually written code to extend the `AccountStatus` enum with domain specific methods
 
-The `role.go` and `status.go` files can be regenerated using any of the following commands (from the [projects root directory](..)):
+The `role.go` and `account_status.go` files can be regenerated using any of the following commands (from the [projects root directory](..)):
 
 ```sh
 # Using the JSON configuration file
@@ -31,8 +31,8 @@ go run ./cmd/goenums/ ./examples/config/enums.yaml
 go generate ./examples/...
 ```
 
-The `main.go` file contains the go:generate directive to regenerate the `role.go` and `status.go` files. The `role_ext.go` and `status_ext.go` files are manually written and are not regenerated.
+The `main.go` file contains the go:generate directive to regenerate the `role.go` and `account_status.go` files. The `role_ext.go` and `account_status_ext.go` files are manually written and are not regenerated.
 
-The `main.go` file demonstrates how to use the `Role` and `Status` enums outside the `auth` package.
+The `main.go` file demonstrates how to use the `Role` and `AccountStatus` enums outside the `auth` package.
 
-The extension files (`role_ext.go` and `status_ext.go`) demonstrate how to extend the enums from within the `auth` package.
+The extension files (`role_ext.go` and `account_status_ext.go`) demonstrate how to extend the enums from within the `auth` package.
