@@ -39,22 +39,16 @@ func TestExtractVariables(t *testing.T) {
 						CamelValue:          "OneValue",
 						LowerCamelValue:     "oneValue",
 						ScreamingSnakeValue: "ONE_VALUE",
-						CamelType:           "TestType",
-						LowerCamelType:      "testType",
 					},
 					{
 						CamelValue:          "ValueTwo",
 						LowerCamelValue:     "valueTwo",
 						ScreamingSnakeValue: "VALUE_TWO",
-						CamelType:           "TestType",
-						LowerCamelType:      "testType",
 					},
 					{
 						CamelValue:          "AndAThird",
 						LowerCamelValue:     "andAThird",
 						ScreamingSnakeValue: "AND_A_THIRD",
-						CamelType:           "TestType",
-						LowerCamelType:      "testType",
 					},
 				},
 			},
@@ -86,12 +80,6 @@ func TestExtractVariables(t *testing.T) {
 				}
 				if e.ScreamingSnakeValue != tc.expected.enums[i].ScreamingSnakeValue {
 					t.Errorf("enum.ScreamingSnakeValue: want %q, got %q", tc.expected.enums[i].ScreamingSnakeValue, e.ScreamingSnakeValue)
-				}
-				if e.CamelType != tc.expected.enums[i].CamelType {
-					t.Errorf("enum.CamelType: want %q, got %q", tc.expected.enums[i].CamelType, e.CamelType)
-				}
-				if e.LowerCamelType != tc.expected.enums[i].LowerCamelType {
-					t.Errorf("enum.LowerCamelType: want %q, got %q", tc.expected.enums[i].LowerCamelType, e.LowerCamelType)
 				}
 			}
 		})
