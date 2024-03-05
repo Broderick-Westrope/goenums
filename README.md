@@ -17,7 +17,7 @@ This repository was forked from [zarldev/goenums](https://github.com/zarldev/goe
 To install goenums, you can use `go install`:
 
 ```sh
-go install github.com/yourusername/goenums
+go install github.com/broderick-westrope/goenums@latest
 ```
 
 ### Stringer

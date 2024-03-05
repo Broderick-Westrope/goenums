@@ -4,7 +4,7 @@ tasks:
   example:
     desc: "Run program by regenerating example enums"
     cmds:
-      - go run ./cmd/goenums/ ./examples/config/enums.json ./examples/enums/
+      - go run . ./examples/config/enums.json ./examples/enums/
 
   test:
     desc: "Run tests"
@@ -14,4 +14,4 @@ tasks:
   build:
     desc: "Build program"
     cmds:
-      - go build -o ./bin/ ./cmd/goenums/
+      - go build -o ./bin/ .
