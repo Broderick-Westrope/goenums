@@ -2,7 +2,7 @@
 
 goenums is a powerful command-line tool designed to generate type-safe Go enums with rich features such as string representations and JSON (de)serialization. Unlike traditional iota-based enums, goenums provides a more robust and flexible approach to using enums in Go, enhancing code safety and developer convenience.
 
-This repository was forked from [zarldev/goenums](https://github.com/zarldev/goenums).
+This repository was originally forked from [zarldev/goenums](https://github.com/zarldev/goenums). It adds support for YAML configuration files and leverages the [iancoleman/strcase](https://github.com/iancoleman/strcase) package, amongst other small improvements.
 
 ## Features
 
@@ -20,9 +20,11 @@ To install goenums, you can use `go install`:
 go install github.com/broderick-westrope/goenums@latest
 ```
 
+If you don't have Go installed, you can download the latest releases (for major OS & architecture pairs) from the releases page on GitHub.
+
 ### Stringer
 
-This tool provides an option to leverage the official [`stringer`](https://pkg.go.dev/golang.org/x/tools/cmd/stringer) tool to automatically generate `String()` methods. This behaviour is enabled by default, however, if you want to use `goenums` without `stringer` you can do so with the `--no-stringer` flag.
+This tool provides an option to leverage the official [`stringer`](https://pkg.go.dev/golang.org/x/tools/cmd/stringer) tool to automatically generate `String()` methods. This behaviour is enabled by default, however, if you want to use goenums without `stringer` you can do so with the `--no-stringer` flag.
 
 If you want to use `stringer` (I recommend you do), then please make sure you have it installed: 
 
