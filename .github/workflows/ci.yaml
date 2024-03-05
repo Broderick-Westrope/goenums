@@ -48,8 +48,12 @@ jobs:
       - name: Go Benchmark (1x)
         run: go test -v -shuffle=on -run=- -bench=. -benchtime=1x ./...
 
+      # Temporary disabled for oldstable due to tool bug when using go 1.21 (https://github.com/golang/go/issues/65590
       - name: Install govulncheck
+        if: matrix == 'stable'
         run: go install golang.org/x/vuln/cmd/govulncheck@latest
 
+      # Temporary disabled for oldstable due to tool bug when using go 1.21 (https://github.com/golang/go/issues/65590
       - name: Run govulncheck
+        if: matrix == 'stable'
         run: govulncheck -test ./...
