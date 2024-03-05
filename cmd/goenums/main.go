@@ -19,7 +19,7 @@ func main() {
 	var format string
 	flag.StringVarP(&format, "format", "f", "", "The format of the config file (json, yaml, yml)")
 	var gofmt bool
-	flag.BoolVarP(&gofmt, "gofmt", "g", false, "Run gofmt on the generated code")
+	flag.BoolVarP(&gofmt, "gofmt", "g", true, "run gofmt on the generated code")
 
 	flag.Parse()
 
