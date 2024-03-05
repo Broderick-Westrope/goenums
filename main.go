@@ -18,8 +18,6 @@ func main() {
 
 	var format string
 	flag.StringVarP(&format, "format", "f", "", "The format of the config file (json, yaml, yml)")
-	var gofmt bool
-	flag.BoolVarP(&gofmt, "gofmt", "g", true, "run gofmt on the generated code")
 
 	flag.Parse()
 
@@ -54,7 +52,7 @@ func main() {
 	}
 
 	// Generate the code
-	g := generator.New(cfg, gofmt)
+	g := generator.New(cfg)
 	err = g.Generate()
 	if err != nil {
 		fmt.Println("Error generating code:", err)

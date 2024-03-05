@@ -22,16 +22,6 @@ go install github.com/broderick-westrope/goenums@latest
 
 If you don't have Go installed, you can download the latest releases (for major OS & architecture pairs) from the releases page on GitHub.
 
-### Stringer
-
-This tool provides an option to leverage the official [`stringer`](https://pkg.go.dev/golang.org/x/tools/cmd/stringer) tool to automatically generate `String()` methods. This behaviour is enabled by default, however, if you want to use goenums without `stringer` you can do so with the `--no-stringer` flag.
-
-If you want to use `stringer` (I recommend you do), then please make sure you have it installed: 
-
-```sh
-go install golang.org/x/tools/cmd/stringer
-```
-
 ## Usage
 
 ```sh
