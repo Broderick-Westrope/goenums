@@ -54,7 +54,7 @@ func main() {
 	}
 
 	// Generate the code
-	g := generator.New(cfg)
+	g := generator.New(cfg, gofmt)
 	err = g.Generate()
 	if err != nil {
 		fmt.Println("Error generating code:", err)
