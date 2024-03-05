@@ -61,7 +61,7 @@ func generateEnum(templateData parser.EnumTemplateData, outPath string, useGofmt
 		cmd := exec.Command("gofmt", "-w", filePath)
 		err = cmd.Run()
 		if err != nil {
-			return err
+			return fmt.Errorf("gofmt failed: %w", err)
 		}
 	}
 	return nil
