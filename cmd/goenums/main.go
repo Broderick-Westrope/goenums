@@ -6,20 +6,22 @@ import (
 
 	"github.com/broderick-westrope/goenums/internal/config"
 	"github.com/broderick-westrope/goenums/internal/generator"
-	"github.com/spf13/pflag"
+	flag "github.com/spf13/pflag"
 )
 
 func main() {
-	pflag.Usage = func() {
+	flag.Usage = func() {
 		fmt.Println("Usage: goenums <config path> <output path>")
-		pflag.PrintDefaults()
+		flag.PrintDefaults()
 		os.Exit(0)
 	}
 
 	var format string
-	pflag.StringVarP(&format, "format", "f", "", "The format of the config file (json, yaml, yml)")
+	flag.StringVarP(&format, "format", "f", "", "The format of the config file (json, yaml, yml)")
+	var gofmt bool
+	flag.BoolVarP(&gofmt, "gofmt", "g", false, "Run gofmt on the generated code")
 
-	pflag.Parse()
+	flag.Parse()
 
 	// Check for the config file
 	if len(os.Args) < 2 {

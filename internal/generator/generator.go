@@ -19,18 +19,20 @@ var fs embed.FS
 type Generator struct {
 	outputPath string
 	data       []parser.EnumTemplateData
+	useGofmt   bool
 }
 
-func New(cfg *config.Config) *Generator {
+func New(cfg *config.Config, useGofmt bool) *Generator {
 	return &Generator{
 		data:       parser.ParseConfig(cfg),
 		outputPath: cfg.OutputPath,
+		useGofmt:   useGofmt,
 	}
 }
 
 func (g *Generator) Generate() error {
 	for _, d := range g.data {
-		err := generateEnum(d, g.outputPath)
+		err := generateEnum(d, g.outputPath, g.useGofmt)
 		if err != nil {
 			return err
 		}
@@ -38,27 +40,29 @@ func (g *Generator) Generate() error {
 	return nil
 }
 
-func generateEnum(templateData parser.EnumTemplateData, outPath string) error {
+func generateEnum(templateData parser.EnumTemplateData, outPath string, useGofmt bool) error {
 	path := filepath.Join(outPath, templateData.SnakePackage)
-	f, fp, err := setupFiles(path, templateData.SnakeFileName)
+	file, filePath, err := setupFiles(path, templateData.SnakeFileName)
 	if err != nil {
 		return err
 	}
 	defer func() {
-		if err := f.Close(); err != nil {
+		if err := file.Close(); err != nil {
 			fmt.Println("Error closing file: ", err)
 		}
 	}()
 	t := template.Must(template.ParseFS(fs, "template/enum.gotmpl"))
-	err = t.Execute(f, templateData)
+	err = t.Execute(file, templateData)
 	if err != nil {
 		return err
 	}
-	// TODO: optionally skip formatting
-	cmd := exec.Command("gofmt", "-w", fp)
-	err = cmd.Run()
-	if err != nil {
-		return err
+
+	if useGofmt {
+		cmd := exec.Command("gofmt", "-w", filePath)
+		err = cmd.Run()
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
